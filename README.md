@@ -2,7 +2,19 @@
 
 A small PHP and MySQL web app that lets several volunteers work together on the Irish (Gaeilge) translations of [FindARescue.ie](https://findarescue.ie). Some of the site's text starts as AI-generated Irish. Contributors review it, propose better versions, add notes and vote, and the tool exports the accepted translations for the main site.
 
-It runs at **translate.findarescue.ie**. The main site's code is in a separate repository: [odhranroche/findarescue.ie](https://github.com/odhranroche/findarescue.ie), which includes a screenshot of the tool.
+It runs at **translate.findarescue.ie**. The main site's code is in a separate repository: [odhranroche/findarescue.ie](https://github.com/odhranroche/findarescue.ie).
+
+![Screenshot of the translation tool at translate.findarescue.ie](FAR_translate_homepage.png)
+
+## What it does
+
+- **Reads the site's strings.** It loads the main site's `translations.js` from a location set in its config file and syncs the keys into its own database. New keys are added, and when a key's English changes the old English is kept and affected translations are tagged "Older English". Keys removed from the file are hidden, but their history stays.
+- **Shows AI translations as a starting point.** Where `translations.js` already has Irish, that is imported as an AI entry credited to "Claude (AI)". Where the Irish is still an English placeholder, an AI suggestion comes from a seed table.
+- **Lets anyone add translations and notes.** Each string can have several translations and discussion notes from different contributors.
+- **Uses voting to pick the best one.** Each translator gets one vote per translation: Accept or Reject. The accepted translation is the one with the most accepts minus rejects, as long as that is above zero, and the newest wins a tie.
+- **Has two views.** "To translate" shows strings without an accepted translation, and "All text" shows everything. There is also search and a section filter.
+- **Exports the result.** It builds a ready-to-paste `ga: { ... }` block containing each key's accepted translation, which is then copied into `translations.js` on the main site.
+- **Lets people undo mistakes.** Deleting is a soft delete with a short Undo window, and the database records who deleted what and when.
 
 ## Files
 
