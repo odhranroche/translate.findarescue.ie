@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0b6e4f">
+<title>Translate · FindARescue.ie</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b6e4f'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3Ega%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+:root{
+  --bg:#f6f5f1; --surface:#ffffff; --surface-2:#f0eee8; --surface-3:#e9e6de;
+  --ink:#18201c; --ink-2:#434c47; --muted:#6f7872; --line:#e4e1d8; --line-strong:#d3cfc4;
+  --primary:#0b6e4f; --primary-hover:#095c42; --primary-ink:#ffffff; --primary-soft:#e2f1ea; --primary-line:#9fd0b9;
+  --todo:#c8553d; --todo-soft:#fbebe5;
+  --danger:#b83a2a; --danger-soft:#fae8e4; --danger-line:#eab4aa;
+  --warn:#8a5a00; --warn-soft:#fff3d1;
+  --ai:#5b4bc4; --ai-soft:#eeebfb;
+  --focus:#2f7de1;
+  --r-lg:16px; --r-md:12px; --r-sm:8px; --r-pill:999px;
+  --sh-1:0 1px 2px rgba(24,32,28,.05),0 1px 1px rgba(24,32,28,.03);
+  --sh-2:0 1px 2px rgba(24,32,28,.04),0 6px 20px -6px rgba(24,32,28,.12);
+  --sh-3:0 20px 50px -12px rgba(24,32,28,.35);
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --display:"Fraunces",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --bar-h:64px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#101412; --surface:#171c19; --surface-2:#1e2420; --surface-3:#262d29;
+  --ink:#e9ede9; --ink-2:#bcc4bf; --muted:#8c958f; --line:#2a312d; --line-strong:#39413c;
+  --primary:#3fbf8c; --primary-hover:#5fd1a2; --primary-ink:#06231a; --primary-soft:#15302a; --primary-line:#2b6b53;
+  --todo:#ee8a6f; --todo-soft:#3a221b;
+  --danger:#f08473; --danger-soft:#3a1f1b; --danger-line:#6b3128;
+  --warn:#f1c35c; --warn-soft:#352b12;
+  --ai:#a99cf5; --ai-soft:#25213f;
+  --focus:#6aa8ff;
+  --sh-1:0 1px 2px rgba(0,0,0,.3); --sh-2:0 1px 2px rgba(0,0,0,.3),0 8px 24px -8px rgba(0,0,0,.5); --sh-3:0 24px 60px -12px rgba(0,0,0,.7);
+}}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--bar-h) + 16px)}
+@media (min-width:720px){html{scroll-padding-top:calc(var(--bar-h) + 80px)}}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font);-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--primary);color:var(--primary-ink);padding:10px 14px;border-radius:var(--r-sm);text-decoration:none;font-weight:600;transition:top .2s}
+.skip:focus{top:12px}
+svg.i{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+svg.i.sm{width:15px;height:15px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 28px}}
+
+/* ==========================================================================
+   Buttons & inputs
+   ========================================================================== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:var(--r-sm);border:1px solid transparent;font-weight:600;font-size:14px;white-space:nowrap;transition:background .15s,border-color .15s,color .15s,transform .1s,box-shadow .15s}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:var(--primary-ink);box-shadow:var(--sh-1)}
+.btn-primary:hover:not(:disabled){background:var(--primary-hover)}
+.btn-secondary{background:var(--surface);border-color:var(--line-strong);color:var(--ink)}
+.btn-secondary:hover{background:var(--surface-2)}
+.btn-ghost{background:transparent;color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn-sm{height:34px;padding:0 12px;font-size:13px}
+.icon-btn{width:40px;padding:0}
+.field{width:100%;background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-sm);padding:10px 12px;transition:border-color .15s,box-shadow .15s}
+.field:hover{border-color:var(--muted)}
+.field:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 22%,transparent)}
+textarea.field{resize:vertical;min-height:84px;line-height:1.5}
+.label{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 6px}
+.hint{font-size:12.5px;color:var(--muted)}
+kbd{font:600 11px var(--mono);background:var(--surface-2);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:1px 5px;color:var(--ink-2)}
+
+/* ==========================================================================
+   App bar
+   ========================================================================== */
+.appbar{position:sticky;top:0;z-index:30;height:var(--bar-h);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.appbar .wrap{height:100%;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:0;overflow:hidden}
+.brand .short{display:none}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#12936a,#0b6e4f 60%,#085339);display:grid;place-items:center;color:#fff;font:700 15px/1 var(--font);letter-spacing:-.02em;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),var(--sh-1);flex:none}
+.brand b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;font-size:12px;color:var(--muted);white-space:nowrap}
+.appbar .spacer{flex:1}
+.me{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 4px;border-radius:var(--r-pill);border:1px solid var(--line-strong);background:var(--surface);font-weight:600;font-size:14px;max-width:190px;transition:background .15s,border-color .15s}
+.me:hover{background:var(--surface-2)}
+.me span.n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 12px/1 var(--font);color:#fff;flex:none;letter-spacing:.02em}
+.avatar.sm{width:24px;height:24px;font-size:10.5px}
+.avatar.ai{background:var(--ai-soft);color:var(--ai)}
+.avatar.site{background:var(--surface-3);color:var(--ink-2)}
+@media (max-width:640px){.brand small,.hide-sm,.brand .long{display:none}.brand .short{display:inline}.appbar .wrap{gap:4px}.me{padding-right:4px}.me span.n{display:none}}
+
+/* ==========================================================================
+   Hero / progress
+   ========================================================================== */
+.hero{padding:28px 0 8px}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1);padding:22px;display:grid;gap:18px}
+@media (min-width:820px){.hero-card{grid-template-columns:1.3fr 1fr;align-items:center;padding:28px 32px}}
+.hero h1{font:700 clamp(24px,3.4vw,32px)/1.15 var(--display);letter-spacing:-.01em;margin:0 0 6px}
+.hero p{margin:0;color:var(--ink-2);max-width:52ch}
+.progress-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.progress-num{font:700 34px/1 var(--display);letter-spacing:-.02em}
+.progress-num small{font:500 14px var(--font);color:var(--muted);margin-left:4px;letter-spacing:0}
+.progress-pct{font-weight:600;color:var(--primary)}
+.bar{height:10px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden}
+.bar>i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#12936a,var(--primary));transition:width .8s var(--ease)}
+.progress-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--ink-2)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* ==========================================================================
+   Toolbar (filters, search, section)
+   ========================================================================== */
+.toolbar{position:relative;z-index:20;background:var(--bg);padding:14px 0 12px}
+@media (min-width:720px){.toolbar{position:sticky;top:var(--bar-h)}}
+.toolbar::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(var(--bg),transparent);pointer-events:none}
+.toolbar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{flex:none;display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:3px;gap:2px}
+.seg button{border:0;background:transparent;height:34px;padding:0 14px;border-radius:9px;font-weight:600;font-size:14px;color:var(--ink-2);display:inline-flex;align-items:center;gap:8px;transition:background .15s,color .15s,box-shadow .15s}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.count{font-size:12px;font-weight:600;min-width:22px;height:20px;padding:0 6px;border-radius:var(--r-pill);display:inline-grid;place-items:center;background:var(--surface-3);color:var(--ink-2)}
+.seg button[aria-pressed="true"] .count.todo{background:var(--todo-soft);color:var(--todo)}
+.search{position:relative;flex:1 1 240px;min-width:0}
+@media (min-width:900px){.toolbar .wrap{flex-wrap:nowrap}}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.search .field{padding-left:38px;padding-right:40px;height:40px}
+.search kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%)}
+.search .field:focus + kbd,.search .field:not(:placeholder-shown) + kbd{display:none}
+select.field{height:40px;padding:0 34px 0 12px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236f7872' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;width:230px;min-width:0;max-width:100%;flex:0 0 230px;text-overflow:ellipsis}
+@media (max-width:719px){select.field{flex:1 1 100%;width:100%}}
+
+/* ==========================================================================
+   Banner
+   ========================================================================== */
+.banner{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);color:var(--warn);border-radius:var(--r-md);padding:12px 14px;font-size:14px;margin-top:14px}
+
+/* ==========================================================================
+   List, sections and cards
+   ========================================================================== */
+main{padding:6px 0 96px}
+.sec-head{display:flex;align-items:center;gap:10px;margin:26px 2px 10px}
+.sec-head h2{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0}
+.sec-head .line{flex:1;height:1px;background:var(--line)}
+.sec-head .count{background:transparent;border:1px solid var(--line-strong)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1);margin-bottom:12px;display:grid;transition:box-shadow .2s,border-color .2s;animation:rise .35s var(--ease) both}
+.card:hover{box-shadow:var(--sh-2)}
+.card.is-done{border-color:var(--primary-line)}
+@media (min-width:900px){.card{grid-template-columns:minmax(0,4fr) minmax(0,7fr)}}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.src{padding:18px 20px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+@media (min-width:900px){.src{border-bottom:0;padding:22px 24px;position:sticky;top:calc(var(--bar-h) + 76px);align-self:start}.tgt{border-left:1px solid var(--line)}}
+.status{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px 3px 8px;border-radius:var(--r-pill)}
+.status.todo{background:var(--todo-soft);color:var(--todo)}
+.status.done{background:var(--primary-soft);color:var(--primary)}
+.en{font-size:17px;line-height:1.5;font-weight:500;color:var(--ink);margin:0;overflow-wrap:anywhere}
+.keyrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.key{font:12px var(--mono);color:var(--muted);background:var(--surface-2);border-radius:6px;padding:2px 7px;overflow-wrap:anywhere}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.copy{border:0;background:transparent;color:var(--muted);padding:3px;border-radius:6px;display:inline-grid;place-items:center;transition:color .15s,background .15s}
+.copy:hover{color:var(--ink);background:var(--surface-2)}
+
+.tgt{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (min-width:900px){.tgt{padding:18px 22px 20px}}
+.group-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin:2px 2px 0}
+.group-label .count{font-size:11px;height:18px;min-width:18px}
+
+/* A translation option */
+.opt{position:relative;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;background:var(--surface);transition:border-color .2s,background .2s,box-shadow .2s}
+.opt:hover{border-color:var(--line-strong)}
+.opt.accepted{border-color:var(--primary-line);background:var(--primary-soft)}
+.opt.leaning{border-color:var(--primary-line)}
+.opt.rejected{background:var(--danger-soft);border-color:var(--danger-line)}
+.opt.rejected .ga{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--danger) 60%,transparent);color:var(--ink-2)}
+.opt-top{display:flex;gap:10px;align-items:flex-start}
+.ga{font-size:16px;line-height:1.5;margin:0;flex:1;min-width:0;overflow-wrap:anywhere;white-space:pre-wrap}
+.badge-accepted{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;color:var(--primary-ink);background:var(--primary);padding:2px 8px 2px 6px;border-radius:var(--r-pill);flex:none;animation:pop .35s var(--ease)}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+.opt-bot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:10px}
+.who{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);min-width:0}
+.who b{font-weight:600;color:var(--ink)}
+.who time{color:var(--muted)}
+.opt-note{margin:10px 0 0;padding:8px 10px;border-radius:var(--r-sm);background:var(--surface-2);font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere}
+.acts{margin-left:auto;display:flex;gap:6px}
+.vote{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:var(--r-pill);border:1px solid var(--line-strong);background:var(--surface);font-size:13px;font-weight:600;color:var(--ink-2);transition:background .15s,border-color .15s,color .15s,transform .12s}
+.vote:hover{color:var(--ink);border-color:var(--muted)}
+.vote:active{transform:scale(.96)}
+.vote .n{font-variant-numeric:tabular-nums;opacity:.85}
+.vote.accept[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.vote.accept:hover:not([aria-pressed="true"]){border-color:var(--primary);color:var(--primary)}
+.vote.reject[aria-pressed="true"]{background:var(--danger);border-color:var(--danger);color:#fff}
+.vote.reject:hover:not([aria-pressed="true"]){border-color:var(--danger);color:var(--danger)}
+.vote.bump{animation:bump .3s var(--ease)}
+@keyframes bump{50%{transform:scale(1.08)}}
+.del{width:32px;height:32px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--muted);display:inline-grid;place-items:center;transition:color .15s,background .15s,border-color .15s}
+.del:hover{color:var(--danger);background:var(--danger-soft)}
+.note .head{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.note .head .del{margin-left:auto;width:28px;height:28px}
+.note .head b{margin-right:2px}
+.toast .undo{border:0;background:rgba(255,255,255,.14);color:inherit;opacity:1;font-weight:700;font-size:13px;padding:4px 10px;border-radius:6px;margin-left:6px}
+.toast .undo:hover{background:rgba(255,255,255,.24)}
+@media (prefers-color-scheme:dark){.toast .undo{background:rgba(0,0,0,.08)}.toast .undo:hover{background:rgba(0,0,0,.16)}}
+.empty-opt{border:1px dashed var(--line-strong);border-radius:var(--r-md);padding:12px 14px;color:var(--muted);font-size:14px}
+
+/* Composer & notes */
+.row-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.add-btn{color:var(--primary)}
+.add-btn:hover{background:var(--primary-soft);color:var(--primary)}
+.composer,.notes{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);padding:14px;display:grid;gap:12px;animation:rise .25s var(--ease)}
+.composer .foot,.note-form .foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.composer .foot .hint,.note-form .foot .hint{margin-right:auto}
+.notes{gap:10px}
+.note{display:flex;gap:10px}
+.note .body{min-width:0;flex:1}
+.note .head{font-size:13px;color:var(--ink-2)}
+.note .head b{color:var(--ink);font-weight:600}
+.note .head time{color:var(--muted)}
+.note p{margin:2px 0 0;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.note-form{display:grid;gap:8px}
+.formerr{color:var(--danger);font-size:13px;min-height:0}
+
+/* States */
+.empty{text-align:center;padding:60px 20px;color:var(--ink-2)}
+.empty .art{width:84px;height:84px;margin:0 auto 16px;border-radius:24px;display:grid;place-items:center;background:var(--primary-soft);color:var(--primary)}
+.empty .art svg{width:40px;height:40px}
+.empty h3{font:700 22px/1.2 var(--display);margin:0 0 6px;color:var(--ink)}
+.empty p{margin:0 auto 18px;max-width:42ch}
+.skel{height:150px;border-radius:var(--r-lg);margin-bottom:12px;background:linear-gradient(90deg,var(--surface) 0%,var(--surface-2) 50%,var(--surface) 100%);background-size:200% 100%;animation:shimmer 1.2s linear infinite;border:1px solid var(--line)}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* ==========================================================================
+   Dialogs
+   ========================================================================== */
+dialog{border:0;padding:0;border-radius:20px;background:var(--surface);color:var(--ink);box-shadow:var(--sh-3);width:min(520px,calc(100vw - 24px));max-height:calc(100dvh - 24px)}
+dialog[open]{animation:dlg .25s var(--ease)}
+dialog::backdrop{background:rgba(10,16,13,.45);backdrop-filter:blur(3px)}
+@keyframes dlg{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.dlg-body{padding:26px}
+.dlg-body h2{font:700 24px/1.2 var(--display);margin:0 0 6px}
+.dlg-body>p{margin:0 0 18px;color:var(--ink-2)}
+.steps{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px}
+.steps li{display:flex;gap:12px;align-items:flex-start}
+.steps .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.steps b{display:block;font-size:14.5px}
+.steps span{font-size:13.5px;color:var(--ink-2)}
+.dlg-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+#exportDlg{width:min(760px,calc(100vw - 24px))}
+#exportText{font:12.5px/1.55 var(--mono);height:50vh;white-space:pre;overflow:auto}
+
+/* ==========================================================================
+   Toasts & back-to-top
+   ========================================================================== */
+.toasts{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:grid;gap:8px;width:max-content;max-width:calc(100vw - 32px)}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:10px 14px 10px 12px;border-radius:12px;box-shadow:var(--sh-3);font-size:14px;font-weight:500;animation:toast .3s var(--ease)}
+.toast.err{background:var(--danger);color:#fff}
+.toast.out{opacity:0;transform:translateY(8px);transition:.25s}
+.toast button{border:0;background:transparent;color:inherit;opacity:.8;padding:2px;display:grid}
+@keyframes toast{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.totop{position:fixed;right:18px;bottom:max(20px,env(safe-area-inset-bottom));z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);box-shadow:var(--sh-2);display:grid;place-items:center;color:var(--ink-2);opacity:0;pointer-events:none;transform:translateY(8px);transition:.2s}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:hover{color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#list">Skip to translations</a>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.6V14M12 17.5v.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3ZM12 10v4M12 17.5v.01"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+  <symbol id="i-party" viewBox="0 0 24 24"><path d="M4 20 9 7l8 8-13 5ZM14 4l1 2M19 9l2-1M17 3l-1 3 3-1M20 13l-2 .5"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<header class="appbar">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="FindARescue.ie Translate, back to top">
+      <span class="logo" aria-hidden="true">ga</span>
+      <span><b><span class="long">FindARescue.ie Translate</span><span class="short">Translate</span></b><small>Irish translation workspace</small></span>
+    </a>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost icon-btn" id="helpBtn" title="How it works" aria-label="How it works"><svg class="i"><use href="#i-help"/></svg></button>
+    <button class="btn btn-ghost icon-btn" id="resyncBtn" title="Re-read translations.js" aria-label="Re-read translations.js"><svg class="i"><use href="#i-refresh"/></svg></button>
+    <button class="btn btn-secondary" id="exportBtn"><svg class="i"><use href="#i-download"/></svg><span class="hide-sm">Export</span></button>
+    <button class="me" id="meBtn" aria-label="Change your name"><span class="avatar" id="meAvatar">?</span><span class="n" id="meName">Set your name</span></button>
+  </div>
+</header>
+
+<section class="hero" aria-labelledby="heroTitle">
+  <div class="wrap">
+    <div class="hero-card">
+      <div>
+        <h1 id="heroTitle">Help translate FindARescue.ie</h1>
+        <p>Review each phrase, accept the best Irish translation, or suggest a better one. Every change saves as you go.</p>
+      </div>
+      <div>
+        <div class="progress-top">
+          <div class="progress-num"><span id="pDone">–</span><small>of <span id="pTotal">–</span> accepted</small></div>
+          <div class="progress-pct" id="pPct"></div>
+        </div>
+        <div class="bar" role="progressbar" aria-labelledby="heroTitle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pBar"><i></i></div>
+        <div class="progress-foot">
+          <div class="legend"><span><i class="dot" style="background:var(--primary)"></i>Accepted</span><span><i class="dot" style="background:var(--todo)"></i><span id="pTodo">–</span> to translate</span></div>
+          <button class="btn btn-primary btn-sm" id="nextBtn">Next to translate<svg class="i sm"><use href="#i-arrow-right"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="banner" id="banner" hidden role="status"><svg class="i"><use href="#i-alert"/></svg><span id="bannerText"></span></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Show">
+      <button data-f="todo" aria-pressed="true">To translate <span class="count todo" id="cTodo">–</span></button>
+      <button data-f="all" aria-pressed="false">All text <span class="count" id="cAll">–</span></button>
+    </div>
+    <label class="search">
+      <span class="sr-only">Search</span>
+      <svg class="i"><use href="#i-search"/></svg>
+      <input class="field" id="q" type="search" placeholder="Search English, Irish or key" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <label class="sr-only" for="section">Page section</label>
+    <select class="field" id="section"><option value="">All sections</option></select>
+  </div>
+</div>
+
+<main id="list" class="wrap" tabindex="-1" aria-live="off">
+  <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+</main>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<button class="totop" id="totop" aria-label="Back to top"><svg class="i"><use href="#i-arrow-up"/></svg></button>
+
+<!-- Welcome / name -->
+<dialog id="welcome" aria-labelledby="wTitle">
+  <form class="dlg-body" id="welcomeForm" method="dialog">
+    <h2 id="wTitle">Fáilte! Welcome</h2>
+    <p>Thanks for helping translate FindARescue.ie into Irish. Here's how it works:</p>
+    <ol class="steps">
+      <li><span class="ic" style="background:var(--ai-soft);color:var(--ai)"><svg class="i"><use href="#i-spark"/></svg></span><span><b>Review the translation</b><span>Each English phrase comes with an AI translation to start from.</span></span></li>
+      <li><span class="ic" style="background:var(--primary-soft);color:var(--primary)"><svg class="i"><use href="#i-check"/></svg></span><span><b>Accept or reject</b><span>If more people accept a translation than reject it, it becomes the accepted translation.</span></span></li>
+      <li><span class="ic" style="background:var(--todo-soft);color:var(--todo)"><svg class="i"><use href="#i-plus"/></svg></span><span><b>Suggest your own</b><span>Add a better translation, with a note to explain your choice if you like.</span></span></li>
+    </ol>
+    <label class="label" for="wName">Your name</label>
+    <input class="field" id="wName" maxlength="80" autocomplete="name" placeholder="e.g. Aoife Ní Bhriain">
+    <p class="hint" style="margin:6px 0 0">Shown next to your translations and votes. It's saved in this browser.</p>
+    <div class="formerr" id="wErr"></div>
+    <div class="dlg-foot"><button type="button" class="btn btn-ghost" id="wCancel" hidden>Cancel</button><button class="btn btn-primary" id="wSubmit">Get started</button></div>
+  </form>
+</dialog>
+
+<!-- Export -->
+<dialog id="exportDlg" aria-labelledby="eTitle">
+  <div class="dlg-body">
+    <h2 id="eTitle">Export Irish</h2>
+    <p>This builds the Irish section of translations.js. Each key gets its accepted translation. Keys without one keep their current value. Paste it over the <code>ga: { … }</code> block.</p>
+    <textarea class="field" id="exportText" readonly aria-label="Exported Irish block"></textarea>
+    <div class="dlg-foot">
+      <button class="btn btn-ghost" id="eClose">Close</button>
+      <button class="btn btn-secondary" id="eDownload"><svg class="i"><use href="#i-download"/></svg>Download</button>
+      <button class="btn btn-primary" id="eCopy"><svg class="i"><use href="#i-copy"/></svg>Copy</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+"use strict";
+const API = "api.php";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const icon = (name, cls = "") => `<svg class="i ${cls}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} } };
+
+// ---------- state ----------
+let S = { strings: [], byId: new Map(), trByString: new Map(), votesByTr: new Map(), notesByString: new Map() };
+let filter = store.get("far_tr_filter2") === "all" ? "all" : "todo";
+let q = "", section = "", me = store.get("far_tr_name") || "";
+const touched = new Set();       // cards changed since the filter last changed stay in view
+const composing = new Set();     // cards with the "suggest translation" form open
+const notesOpen = new Set();     // cards with the notes panel open
+const drafts = new Map();        // sid -> {text, note}; survives re-renders
+const noteDrafts = new Map();    // sid -> text
+
+// ---------- helpers ----------
+const sameName = (a, b) => String(a).trim().localeCompare(String(b).trim(), undefined, { sensitivity: "base" }) === 0;
+function ago(iso){
+  const t = Date.parse(iso); if (!t) return "";
+  const s = (Date.now() - t) / 1000;
+  if (s < 45) return "just now";
+  if (s < 3600) return `${Math.round(s / 60)} min ago`;
+  if (s < 86400) return `${Math.round(s / 3600)} h ago`;
+  if (s < 86400 * 7) { const d = Math.round(s / 86400); return d === 1 ? "yesterday" : `${d} days ago`; }
+  return new Date(t).toLocaleDateString("en-IE", { day: "numeric", month: "short", year: "numeric" });
+}
+const full = iso => new Date(iso).toLocaleString("en-IE", { dateStyle: "medium", timeStyle: "short" });
+const initials = n => (String(n).trim().split(/\s+/).map(w => w[0]).join("").slice(0, 2) || "?").toUpperCase();
+const HUES = [158, 200, 262, 18, 330, 38, 120, 285];
+const hue = n => { let h = 0; for (const c of String(n).toLowerCase()) h = (h * 31 + c.charCodeAt(0)) >>> 0; return HUES[h % HUES.length]; };
+const avatar = (n, sm = true) => `<span class="avatar ${sm ? "sm" : ""}" style="background:hsl(${hue(n)} 55% 42%)" aria-hidden="true">${esc(initials(n))}</span>`;
+
+function score(t){
+  const vs = S.votesByTr.get(t.id) || [];
+  const up = vs.filter(v => v.vote > 0), down = vs.filter(v => v.vote < 0);
+  const mine = me ? (vs.find(v => sameName(v.voter, me))?.vote || 0) : 0;
+  return { up, down, net: up.length - down.length, mine };
+}
+const trs = s => S.trByString.get(s.id) || [];
+const aiOf = s => trs(s).find(t => t.source === "ai");
+const humansOf = s => trs(s).filter(t => t.source === "human");
+// The accepted translation: highest net score above zero; the newest wins a tie (same rule as Export).
+function acceptedOf(s){
+  let best = null, bestNet = 0;
+  for (const t of trs(s)) {
+    const n = score(t).net;
+    if (n > bestNet || (n === bestNet && n > 0 && (t.created_at > best.created_at || (t.created_at === best.created_at && t.id > best.id)))) { best = t; bestNet = n; }
+  }
+  return best;
+}
+const isTodo = s => !acceptedOf(s);
+const active = () => S.strings.filter(s => s.active === 1);
+// Section names come from comments in translations.js; drop trailing asides like "(…)" or ": …" for display.
+const secOf = s => s.section || "Other";
+const secLabel = k => { const t = k.replace(/\s*\(.*\)\s*$/, "").replace(/\s+[—–-]\s+(new UI strings|provinces.*)$/i, ""); return t.length > 48 ? t.slice(0, 46) + "…" : t; };
+
+// ---------- data ----------
+async function load({ resync = false, quiet = false } = {}){
+  try {
+    const r = await fetch(`${API}?action=list${resync ? "&resync=1" : ""}`, { cache: "no-store" });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || "Couldn't load");
+    index(d);
+    const msg = { fetch_failed: "Couldn't read translations.js, so new or changed text may be missing. Check TRANSLATIONS_SOURCE in config.php.",
+                  parse_failed: "translations.js was read but no text was found in it. Nothing was changed." }[d.sync];
+    $("banner").hidden = !msg; $("bannerText").textContent = msg || "";
+    buildSections();
+    render();
+    if (resync) toast(d.sync === "synced" ? "Up to date with translations.js" : "Resync didn't complete", d.sync !== "synced");
+  } catch (e) {
+    if (!quiet) { $("list").innerHTML = emptyState("alert", "Couldn't load translations", esc(e.message), `<button class="btn btn-primary" data-act="retry">Try again</button>`); }
+    else toast("Couldn't refresh: " + e.message, true);
+  }
+}
+function index(d){
+  const num = (o, ks) => ks.forEach(k => o[k] = o[k] === null ? null : Number(o[k]));
+  d.strings.forEach(s => num(s, ["id", "sort_order", "file_ga_todo", "active"]));
+  d.translations.forEach(t => num(t, ["id", "string_id"]));
+  d.votes.forEach(v => num(v, ["translation_id", "vote"]));
+  d.notes.forEach(n => num(n, ["id", "string_id"]));
+  const trByString = new Map(), votesByTr = new Map(), notesByString = new Map(), byId = new Map();
+  const push = (m, k, v) => { if (!m.has(k)) m.set(k, []); m.get(k).push(v); };
+  d.strings.forEach(s => byId.set(s.id, s));
+  d.translations.forEach(t => push(trByString, t.string_id, t));   // newest first from the API
+  d.votes.forEach(v => push(votesByTr, v.translation_id, v));
+  d.notes.forEach(n => push(notesByString, n.string_id, n));
+  S = { strings: d.strings, byId, trByString, votesByTr, notesByString };
+}
+async function post(action, payload){
+  const r = await fetch(`${API}?action=${action}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Requested-With": "far-translate" },
+    body: JSON.stringify(payload)
+  });
+  const d = await r.json().catch(() => ({ ok: false, error: `Server error (${r.status})` }));
+  if (!d.ok) throw new Error(d.error || "Save failed");
+  return d;
+}
+
+// ---------- rendering ----------
+function buildSections(){
+  const secs = [...new Set(active().map(secOf))];
+  const sel = $("section"), cur = section;
+  sel.innerHTML = `<option value="">All sections</option>` + secs.map(x => `<option value="${esc(x)}">${esc(secLabel(x))}</option>`).join("");
+  sel.value = secs.includes(cur) ? cur : ""; section = sel.value;
+}
+function visible(){
+  const ql = q.trim().toLowerCase();
+  return active().filter(s => {
+    if (section && secOf(s) !== section) return false;
+    if (filter === "todo" && !touched.has(s.id) && !isTodo(s)) return false;
+    if (!ql) return true;
+    return [s.str_key, s.en_text, ...trs(s).map(t => t.text), ...(S.notesByString.get(s.id) || []).map(n => n.text)]
+      .some(x => String(x).toLowerCase().includes(ql));
+  });
+}
+function emptyState(ic, title, text, cta = ""){
+  return `<div class="empty"><div class="art">${icon(ic)}</div><h3>${title}</h3><p>${text}</p>${cta}</div>`;
+}
+function render(){
+  updateStats();
+  const list = visible();
+  if (!list.length) {
+    const ql = q.trim();
+    $("list").innerHTML = ql || section
+      ? emptyState("search", "No matches", "Try a different word, or clear the search and section filter.", `<button class="btn btn-secondary" data-act="clear">Clear filters</button>`)
+      : filter === "todo"
+        ? emptyState("party", "Everything's translated", "Every piece of text has an accepted Irish translation. Go raibh míle maith agat!", `<button class="btn btn-secondary" data-act="show-all">Review all text</button>`)
+        : emptyState("search", "No text yet", "Nothing was found in translations.js.");
+    return;
+  }
+  let html = "", sec = null;
+  const counts = {};
+  list.forEach(s => { const k = secOf(s); counts[k] = (counts[k] || 0) + 1; });
+  list.forEach((s, i) => {
+    const k = secOf(s);
+    if (k !== sec) { sec = k; html += `<div class="sec-head"><h2 title="${esc(k)}">${esc(secLabel(k))}</h2><span class="count">${counts[k]}</span><span class="line"></span></div>`; }
+    html += cardHTML(s, i);
+  });
+  $("list").innerHTML = html;
+}
+function updateStats(){
+  const a = active(), done = a.filter(s => !isTodo(s)).length, total = a.length, todo = total - done;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  $("pDone").textContent = done; $("pTotal").textContent = total; $("pTodo").textContent = todo;
+  $("pPct").textContent = `${pct}%`;
+  $("pBar").setAttribute("aria-valuenow", pct); $("pBar").firstElementChild.style.width = pct + "%";
+  $("cTodo").textContent = todo; $("cAll").textContent = total;
+  $("nextBtn").disabled = todo === 0;
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f === filter)));
+}
+function optHTML(s, t, acc){
+  const sc = score(t), isAcc = acc && acc.id === t.id;
+  const cls = isAcc ? "accepted" : sc.net < 0 ? "rejected" : sc.net > 0 ? "leaning" : "";
+  const outdated = t.en_snapshot !== s.en_text;
+  let who;
+  if (t.source === "ai") who = `<span class="avatar sm ai" aria-hidden="true">${icon("spark","sm")}</span><span><b>Claude (AI)</b> · <time datetime="${esc(t.created_at)}" title="${esc(full(t.created_at))}">${ago(t.created_at)}</time></span>`;
+  else who = `${avatar(t.translator)}<span><b>${esc(t.translator)}</b> · <time datetime="${esc(t.created_at)}" title="${esc(full(t.created_at))}">${ago(t.created_at)}</time></span>`;
+  const upNames = sc.up.map(v => v.voter).join(", "), downNames = sc.down.map(v => v.voter).join(", ");
+  return `<div class="opt ${cls}">
+    <div class="opt-top"><p class="ga" lang="ga">${esc(t.text)}</p>${isAcc ? `<span class="badge-accepted">${icon("check","sm")}Accepted</span>` : ""}</div>
+    ${t.note ? `<p class="opt-note">${esc(t.note)}</p>` : ""}
+    <div class="opt-bot">
+      <div class="who">${who}</div>
+      ${outdated ? `<span class="chip warn" title="Translated from: ${esc(t.en_snapshot)}">${icon("alert","sm")}Older English</span>` : ""}
+      <div class="acts">
+        <button class="vote accept" data-act="vote" data-v="1" data-t="${t.id}" data-s="${s.id}" aria-pressed="${sc.mine > 0}"
+          title="${upNames ? "Accepted by " + esc(upNames) : "Accept this translation"}" aria-label="Accept${sc.up.length ? `, ${sc.up.length} so far` : ""}">${icon("check","sm")}<span>Accept</span>${sc.up.length ? `<span class="n">${sc.up.length}</span>` : ""}</button>
+        <button class="vote reject" data-act="vote" data-v="-1" data-t="${t.id}" data-s="${s.id}" aria-pressed="${sc.mine < 0}"
+          title="${downNames ? "Rejected by " + esc(downNames) : "Reject this translation"}" aria-label="Reject${sc.down.length ? `, ${sc.down.length} so far` : ""}">${icon("x","sm")}${sc.down.length ? `<span class="n">${sc.down.length}</span>` : `<span class="sr-only">Reject</span>`}</button>
+        <button class="del" data-act="del-tr" data-t="${t.id}" data-s="${s.id}" title="Delete this translation" aria-label="Delete this translation">${icon("trash","sm")}</button>
+      </div>
+    </div>
+  </div>`;
+}
+function cardHTML(s, i = 0){
+  const acc = acceptedOf(s), ai = aiOf(s), hs = humansOf(s);
+  const notes = S.notesByString.get(s.id) || [];
+  const d = drafts.get(s.id) || { text: "", note: "" };
+  const enChanged = s.en_changed_at && s.prev_en_text !== null;
+  const delay = Math.min(i, 8) * 30;
+  return `<article class="card ${acc ? "is-done" : ""}" data-sid="${s.id}" id="s-${s.id}" style="animation-delay:${delay}ms" aria-labelledby="en-${s.id}">
+    <div class="src">
+      ${acc ? `<span class="status done">${icon("check","sm")}Accepted</span>` : `<span class="status todo"><i class="dot" style="background:currentColor;margin:0"></i>To translate</span>`}
+      <p class="en" id="en-${s.id}" lang="en">${esc(s.en_text)}</p>
+      <div class="keyrow">
+        <span class="key">${esc(s.str_key)}</span>
+        <button class="copy" data-act="copy-en" data-s="${s.id}" title="Copy English" aria-label="Copy English text">${icon("copy","sm")}</button>
+        ${enChanged ? `<span class="chip warn" title="Previously: ${esc(s.prev_en_text)}">${icon("alert","sm")}English changed ${ago(s.en_changed_at)}</span>` : ""}
+      </div>
+    </div>
+    <div class="tgt">
+      <div class="group-label">${icon("spark","sm")}AI translation</div>
+      ${ai ? optHTML(s, ai, acc) : `<div class="empty-opt">No AI translation for this text.</div>`}
+      <div class="group-label">Human translations ${hs.length ? `<span class="count">${hs.length}</span>` : ""}</div>
+      ${hs.length ? hs.map(h => optHTML(s, h, acc)).join("") : ""}
+      ${composing.has(s.id) ? `
+        <form class="composer" data-form="tr" data-s="${s.id}">
+          <div><label class="label" for="t-${s.id}">Your Irish translation</label>
+            <textarea class="field" id="t-${s.id}" name="text" lang="ga" maxlength="2000" rows="3" placeholder="Scríobh an t-aistriúchán anseo…" data-draft="text">${esc(d.text)}</textarea></div>
+          <div><label class="label" for="n-${s.id}">Note <span class="hint">(optional)</span></label>
+            <input class="field" id="n-${s.id}" name="note" maxlength="1000" placeholder="Why this wording? Any context for others?" value="${esc(d.note)}" data-draft="note"></div>
+          <div class="formerr" role="alert"></div>
+          <div class="foot"><span class="hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to save</span>
+            <button type="button" class="btn btn-ghost btn-sm" data-act="cancel" data-s="${s.id}">Cancel</button>
+            <button class="btn btn-primary btn-sm">${icon("check","sm")}Save translation</button></div>
+        </form>` : ""}
+      ${notesOpen.has(s.id) ? `
+        <div class="notes" id="notes-${s.id}">
+          ${notes.length ? notes.map(n => `<div class="note">${avatar(n.author)}<div class="body"><div class="head"><b>${esc(n.author)}</b> · <time datetime="${esc(n.created_at)}" title="${esc(full(n.created_at))}">${ago(n.created_at)}</time><button class="del" data-act="del-note" data-n="${n.id}" data-s="${s.id}" title="Delete this note" aria-label="Delete note by ${esc(n.author)}">${icon("trash","sm")}</button></div><p>${esc(n.text)}</p></div></div>`).join("")
+                         : `<p class="hint" style="margin:0">No discussion yet. Ask a question or add context for other translators.</p>`}
+          <form class="note-form" data-form="note" data-s="${s.id}">
+            <label class="sr-only" for="nt-${s.id}">Add a note</label>
+            <textarea class="field" id="nt-${s.id}" name="text" maxlength="1000" rows="2" placeholder="Add a note…" data-draft="notetext" style="min-height:60px">${esc(noteDrafts.get(s.id) || "")}</textarea>
+            <div class="formerr" role="alert"></div>
+            <div class="foot"><span class="hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to post</span><button class="btn btn-secondary btn-sm">Post note</button></div>
+          </form>
+        </div>` : ""}
+      <div class="row-actions">
+        ${composing.has(s.id) ? "" : `<button class="btn btn-ghost btn-sm add-btn" data-act="compose" data-s="${s.id}">${icon("plus","sm")}Suggest a translation</button>`}
+        <button class="btn btn-ghost btn-sm" data-act="notes" data-s="${s.id}" aria-expanded="${notesOpen.has(s.id)}" aria-controls="notes-${s.id}">${icon("chat","sm")}${notesOpen.has(s.id) ? "Hide notes" : notes.length ? `Notes <span class="count">${notes.length}</span>` : "Add note"}</button>
+      </div>
+    </div>
+  </article>`;
+}
+function rerenderCard(sid, focusSel){
+  const el = document.querySelector(`.card[data-sid="${sid}"]`), s = S.byId.get(sid);
+  if (!el || !s) return render();
+  const tmp = document.createElement("div"); tmp.innerHTML = cardHTML(s);
+  const card = tmp.firstElementChild; card.style.animation = "none";
+  el.replaceWith(card);
+  updateStats();
+  if (focusSel) { const f = card.querySelector(focusSel); if (f) { f.focus(); if (f.setSelectionRange) f.setSelectionRange(f.value.length, f.value.length); } }
+  return card;
+}
+
+// ---------- toasts ----------
+function toast(msg, err = false, action = null){
+  const t = document.createElement("div");
+  t.className = "toast" + (err ? " err" : "");
+  t.innerHTML = `${icon(err ? "alert" : action ? "trash" : "check")}<span>${esc(msg)}</span>`
+    + (action ? `<button class="undo">${esc(action.label)}</button>` : "")
+    + (err || action ? `<button class="x" aria-label="Dismiss">${icon("x","sm")}</button>` : "");
+  $("toasts").appendChild(t);
+  let done = false;
+  const close = () => { if (done) return; done = true; t.classList.add("out"); setTimeout(() => t.remove(), 260); };
+  t.querySelector(".x")?.addEventListener("click", close);
+  t.querySelector(".undo")?.addEventListener("click", () => { close(); action.fn(); });
+  setTimeout(close, err ? 7000 : action ? 8000 : 2200);
+}
+
+// ---------- identity ----------
+function paintMe(){
+  $("meName").textContent = me || "Set your name";
+  const a = $("meAvatar");
+  a.textContent = me ? initials(me) : "?";
+  a.style.background = me ? `hsl(${hue(me)} 55% 42%)` : "var(--muted)";
+}
+function openWelcome(first){
+  $("wName").value = me; $("wErr").textContent = "";
+  $("wTitle").textContent = first ? "Fáilte! Welcome" : "How it works";
+  $("wSubmit").textContent = first ? "Get started" : "Save";
+  $("wCancel").hidden = first;
+  $("welcome").showModal(); $("wName").focus();
+}
+$("welcomeForm").addEventListener("submit", e => {
+  const n = $("wName").value.trim().replace(/\s+/g, " ").slice(0, 80);
+  if (!n) { e.preventDefault(); $("wErr").textContent = "Please enter your name so others can see who translated what."; $("wName").focus(); return; }
+  me = n; store.set("far_tr_name", me); paintMe(); render();
+});
+
+$("wCancel").onclick = () => $("welcome").close();
+$("meBtn").onclick = () => openWelcome(false);
+$("helpBtn").onclick = () => openWelcome(!me);
+const needName = () => { if (me) return true; openWelcome(true); return false; };
+
+// ---------- interactions ----------
+$("list").addEventListener("click", async e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const sid = Number(b.dataset.s);
+  switch (b.dataset.act) {
+    case "vote": {
+      if (!needName()) return;
+      const tid = Number(b.dataset.t), want = Number(b.dataset.v);
+      const s = S.byId.get(sid), t = trs(s).find(x => x.id === tid);
+      const before = S.votesByTr.get(tid) || [];
+      const vote = score(t).mine === want ? 0 : want;             // clicking your current vote again clears it
+      const wasDone = !isTodo(s);
+      const next = before.filter(v => !sameName(v.voter, me));
+      if (vote) next.push({ translation_id: tid, voter: me, vote });
+      S.votesByTr.set(tid, next); touched.add(sid);
+      const card = rerenderCard(sid);
+      card?.querySelector(`.vote[data-t="${tid}"][data-v="${want}"]`)?.classList.add("bump");
+      card?.querySelector(`.vote[data-t="${tid}"][data-v="${want}"]`)?.focus();
+      try {
+        await post("vote", { translation_id: tid, name: me, vote });
+        const nowDone = !isTodo(s);
+        toast(nowDone && !wasDone ? "Accepted, nice one!" : !nowDone && wasDone ? "Back on the to-translate list" : vote === 0 ? "Vote removed" : vote > 0 ? "Accepted" : "Rejected");
+      } catch (err) {
+        S.votesByTr.set(tid, before); rerenderCard(sid);
+        toast("Not saved: " + err.message, true);
+      }
+      break;
+    }
+    case "compose":
+      if (!needName()) return;
+      composing.add(sid); rerenderCard(sid, "textarea[data-draft=text]"); break;
+    case "cancel":
+      composing.delete(sid); drafts.delete(sid); rerenderCard(sid, "[data-act=compose]"); break;
+    case "notes":
+      if (notesOpen.has(sid)) { notesOpen.delete(sid); rerenderCard(sid, "[data-act=notes]"); }
+      else { notesOpen.add(sid); rerenderCard(sid, "textarea[data-draft=notetext]"); }
+      break;
+    case "del-tr":
+      removeItem("translation", Number(b.dataset.t), sid); break;
+    case "del-note":
+      removeItem("note", Number(b.dataset.n), sid); break;
+    case "copy-en":
+      try { await navigator.clipboard.writeText(S.byId.get(sid).en_text); toast("English copied"); } catch { toast("Couldn't copy", true); }
+      break;
+    case "retry": load(); break;
+    case "clear": q = ""; section = ""; $("q").value = ""; $("section").value = ""; render(); break;
+    case "show-all": setFilter("all"); break;
+  }
+});
+// Keep drafts across re-renders
+$("list").addEventListener("input", e => {
+  const el = e.target, form = el.closest("form"); if (!form || !el.dataset.draft) return;
+  const sid = Number(form.dataset.s);
+  if (el.dataset.draft === "notetext") { noteDrafts.set(sid, el.value); return; }
+  const d = drafts.get(sid) || { text: "", note: "" }; d[el.dataset.draft] = el.value; drafts.set(sid, d);
+});
+$("list").addEventListener("keydown", e => {
+  const form = e.target.closest("form[data-form]"); if (!form) return;
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); form.requestSubmit(); }
+  if (e.key === "Escape" && form.dataset.form === "tr") { e.preventDefault(); form.querySelector("[data-act=cancel]").click(); }
+});
+$("list").addEventListener("submit", async e => {
+  const form = e.target.closest("form[data-form]"); if (!form) return;
+  e.preventDefault();
+  if (!needName()) return;
+  const sid = Number(form.dataset.s), err = form.querySelector(".formerr"), btn = form.querySelector("button:not([type=button])");
+  err.textContent = "";
+  try {
+    if (form.dataset.form === "tr") {
+      const text = form.elements.text.value.trim(), note = form.elements.note.value.trim();
+      if (!text) { err.textContent = "Please write the Irish translation."; form.elements.text.focus(); return; }
+      btn.disabled = true;
+      await post("add_translation", { string_id: sid, text, name: me, note });
+      composing.delete(sid); drafts.delete(sid); touched.add(sid);
+      toast("Translation saved");
+    } else {
+      const text = form.elements.text.value.trim();
+      if (!text) { err.textContent = "Please write a note."; form.elements.text.focus(); return; }
+      btn.disabled = true;
+      await post("add_note", { string_id: sid, text, name: me });
+      noteDrafts.delete(sid); touched.add(sid);
+      toast("Note posted");
+    }
+    await load({ quiet: true });
+    document.querySelector(`.card[data-sid="${sid}"]`)?.querySelector("[data-act=compose],[data-act=notes]")?.focus({ preventScroll: true });
+  } catch (x) {
+    err.textContent = "Not saved: " + x.message; btn.disabled = false;
+  }
+});
+
+// Delete a translation or note straight away, with an Undo in the toast.
+async function removeItem(type, id, sid){
+  if (!needName()) return;
+  const map = type === "translation" ? S.trByString : S.notesByString;
+  const list = map.get(sid) || [], idx = list.findIndex(x => x.id === id);
+  if (idx < 0) return;
+  const [item] = list.splice(idx, 1);
+  touched.add(sid);
+  const card = rerenderCard(sid);
+  card?.querySelector(type === "translation" ? "[data-act=compose]" : "textarea[data-draft=notetext]")?.focus({ preventScroll: true });
+  const label = type === "translation" ? "Translation deleted" : "Note deleted";
+  try {
+    await post("delete", { type, id, name: me });
+    toast(label, false, { label: "Undo", fn: async () => {
+      try { await post("delete", { type, id, name: me, restore: true }); await load({ quiet: true }); toast(type === "translation" ? "Translation restored" : "Note restored"); }
+      catch (e) { toast("Couldn't restore: " + e.message, true); }
+    }});
+  } catch (e) {
+    list.splice(idx, 0, item); rerenderCard(sid);
+    toast("Not deleted: " + e.message, true);
+  }
+}
+
+function setFilter(f){ filter = f; store.set("far_tr_filter2", f); touched.clear(); render(); window.scrollTo({ top: $("list").offsetTop - 140, behavior: "smooth" }); }
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setFilter(b.dataset.f)));
+let qt; $("q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { q = e.target.value; touched.clear(); render(); }, 120); });
+$("section").addEventListener("change", e => { section = e.target.value; touched.clear(); render(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) && !document.querySelector("dialog[open]")) { e.preventDefault(); $("q").focus(); }
+});
+$("nextBtn").onclick = () => {
+  const cards = [...document.querySelectorAll(".card")];
+  const todoCards = cards.filter(c => isTodo(S.byId.get(Number(c.dataset.sid))));
+  if (!todoCards.length) { setFilter("todo"); return; }
+  const line = window.innerHeight * 0.3;
+  const target = todoCards.find(c => c.getBoundingClientRect().top > line) || todoCards[0];
+  target.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  target.querySelector(".vote, [data-act=compose]")?.focus({ preventScroll: true });
+};
+$("resyncBtn").onclick = async () => { const b = $("resyncBtn"); b.disabled = true; b.firstElementChild.style.animation = "spin 0.8s linear infinite"; await load({ resync: true, quiet: true }); b.disabled = false; b.firstElementChild.style.animation = ""; };
+$("exportBtn").onclick = async () => {
+  $("exportText").value = "Building…"; $("exportDlg").showModal();
+  try { const r = await fetch(`${API}?action=export`, { cache: "no-store" }); $("exportText").value = await r.text(); }
+  catch (e) { $("exportText").value = "Export failed: " + e.message; }
+};
+$("eClose").onclick = () => $("exportDlg").close();
+$("eCopy").onclick = async () => { try { await navigator.clipboard.writeText($("exportText").value); toast("Copied to clipboard"); } catch { $("exportText").select(); document.execCommand("copy"); toast("Copied"); } };
+$("eDownload").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([$("exportText").value], { type: "text/javascript" }));
+  a.download = "translations-ga.js"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+const totop = $("totop");
+addEventListener("scroll", () => totop.classList.toggle("show", scrollY > 900), { passive: true });
+totop.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+// Refresh with other translators' changes when coming back to the tab,
+// unless you're in the middle of typing.
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden || document.querySelector("dialog[open]")) return;
+  if (composing.size || [...noteDrafts.values()].some(Boolean)) return;
+  load({ quiet: true });
+});
+const st = document.createElement("style"); st.textContent = "@keyframes spin{to{transform:rotate(360deg)}}"; document.head.appendChild(st);
+
+paintMe();
+load();
+if (!me) openWelcome(true);
+})();
+</script>
+</body>
+</html>

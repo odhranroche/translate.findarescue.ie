@@ -1,0 +1,7 @@
+# Block direct access to settings and the SQL script
+<FilesMatch "^(config\.php|schema\.sql|README\.md)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
+# Keep search engines out
+Header set X-Robots-Tag "noindex, nofollow"
