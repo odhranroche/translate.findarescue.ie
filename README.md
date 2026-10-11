@@ -1,4 +1,8 @@
-# FindARescue.ie translation tool: setup
+# translate.findarescue.ie
+
+A small PHP and MySQL web app that lets several volunteers work together on the Irish (Gaeilge) translations of [FindARescue.ie](https://findarescue.ie). Some of the site's text starts as AI-generated Irish. Contributors review it, propose better versions, add notes and vote, and the tool exports the accepted translations for the main site.
+
+It runs at **translate.findarescue.ie**. The main site's code is in a separate repository: [odhranroche/findarescue.ie](https://github.com/odhranroche/findarescue.ie), which includes a screenshot of the tool.
 
 ## Files
 
@@ -6,16 +10,17 @@
 |---|---|
 | `index.html` | The page translators use |
 | `api.php` | JSON API. It reads `translations.js`, syncs it into MySQL and saves every change |
-| `config.php` | Database login and the location of `translations.js` |
+| `config.php` | Database login and the location of `translations.js` (**not in this repo**) |
 | `schema.sql` | Creates the tables and seeds AI translations for the 28 strings that are still English placeholders |
 | `.htaccess` | Blocks direct access to `config.php`, `schema.sql` and this README |
+| `.gitignore` | Keeps `config.php` and other local files out of git |
 
 ## Install on Hostinger
 
 1. **Create the tables.** In hPanel → Databases → phpMyAdmin, open `u472596395_translate`, go to the **Import** tab and upload `schema.sql`. You can run it again safely.
-2. **Upload the files.** In File Manager, create a folder such as `public_html/translate/` and upload `index.html`, `api.php`, `config.php` and `.htaccess` into it.
-3. **Check `TRANSLATIONS_SOURCE` in `config.php`.** Set it to the real public URL of `translations.js` (for example `https://findarescue.ie/js/translations.js`), or to its absolute server path.
-4. Open `https://findarescue.ie/translate/`. The first load reads the file and fills the database.
+2. **Upload the files.** In File Manager, open the folder for the `translate.findarescue.ie` subdomain and upload `index.html`, `api.php`, `config.php` and `.htaccess` into it.
+3. **Check `TRANSLATIONS_SOURCE` in `config.php`.** Set it to the real public URL of `translations.js` (for example `https://findarescue.ie/translations.js`), or to its absolute server path.
+4. Open `https://translate.findarescue.ie/`. The first load reads the file and fills the database.
 
 ## How it behaves
 
@@ -45,3 +50,9 @@
 - Each IP address gets at most 60 writes a minute.
 - Every write is a single short statement. The sync runs in one ordered transaction behind a MySQL named lock, and deadlocks or lock timeouts are retried.
 - The page has `noindex` set. Anyone who has the link can still contribute.
+
+## Working on this repo
+
+- **`config.php` is deliberately not committed.** It contains database credentials, and `.gitignore` excludes it. Create it on the server from the settings described above, and keep a copy somewhere safe, as the repo can't recover it.
+- **The database is not in git.** Translations, votes and notes live in MySQL on Hostinger. Export a dump from phpMyAdmin to back them up.
+- **Where this lives on disk.** Locally this repository sits inside the main site's folder, at `findarescue.ie/public_html/translate/`, to match the server layout. The main site's repository ignores it.
