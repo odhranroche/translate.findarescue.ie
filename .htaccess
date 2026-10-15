@@ -1,6 +1,10 @@
-# Block direct access to settings and the SQL script
-<FilesMatch "^(config\.php|schema\.sql|README\.md)$">
+# Block direct access to settings, the SQL script and the docs
+<FilesMatch "^(config\.php|config\.sample\.php|schema\.sql|README\.md)$">
   Require all denied
+</FilesMatch>
+# The page's own scripts/styles: always revalidate, so a deploy shows up straight away
+<FilesMatch "\.(js|css)$">
+  Header set Cache-Control "no-cache"
 </FilesMatch>
 Options -Indexes
 # Keep search engines out

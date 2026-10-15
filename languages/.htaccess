@@ -1,0 +1,2 @@
+# Language settings, seed text and docs are read by the server, never served directly
+Require all denied

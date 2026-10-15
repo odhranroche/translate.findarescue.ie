@@ -1,16 +1,22 @@
 -- ==========================================================================
--- FindARescue.ie translation tool: database schema
--- Run once in phpMyAdmin (Hostinger → Databases → phpMyAdmin → select
--- u472596395_translate → Import or SQL tab). It is safe to re-run:
--- every statement uses IF NOT EXISTS / INSERT IGNORE.
--- Engine: InnoDB, charset utf8mb4 (needed for fadas, emoji, "…", "€").
+-- Translation portal: database schema (the same for every language)
+-- Run once in phpMyAdmin: select the portal's (empty) database first, then
+-- open the Import or SQL tab. It is safe to re-run: every statement uses
+-- IF NOT EXISTS.
+-- Engine: InnoDB, charset utf8mb4 (needed for accents, emoji, "…", "€").
+--
+-- One database per portal. It holds one language's translations, so a second
+-- language needs its own database (and its own deployment).
 -- ==========================================================================
 
 SET NAMES utf8mb4;
-USE u472596395_translate;
 
--- One row per key in translations.js. Rows are never deleted. When a key
+-- One row per key in the translations file. Rows are never deleted. When a key
 -- disappears from the file it is marked inactive, so its history survives.
+-- Naming note: str_key / en_text / prev_en_text / en_changed_at hold the BASE
+-- language (English in the shipped examples) and file_ga / file_ga_todo hold
+-- the TARGET language, whichever language the portal serves. The names are
+-- historical and kept so existing databases need no migration.
 CREATE TABLE IF NOT EXISTS strings (
   id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
   str_key        VARCHAR(100) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -19,8 +25,8 @@ CREATE TABLE IF NOT EXISTS strings (
   en_text        TEXT NOT NULL,
   prev_en_text   TEXT NULL,                    -- English before the last change
   en_changed_at  DATETIME NULL,                -- when English last changed (UTC)
-  file_ga        TEXT NULL,                    -- current "ga" value in the file
-  file_ga_todo   TINYINT(1) NOT NULL DEFAULT 0,-- 1 = file's ga is an English placeholder
+  file_ga        TEXT NULL,                    -- current target-language value in the file
+  file_ga_todo   TINYINT(1) NOT NULL DEFAULT 0,-- 1 = file's target value is a base-language placeholder
   active         TINYINT(1) NOT NULL DEFAULT 1,-- 0 = key removed from the file
   seen_sync      INT UNSIGNED NOT NULL DEFAULT 0,
   first_seen     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -73,9 +79,10 @@ CREATE TABLE IF NOT EXISTS notes (
   CONSTRAINT fk_note_string FOREIGN KEY (string_id) REFERENCES strings(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- AI translations for keys whose Irish in the file is still an English
+-- AI translations for keys whose target text in the file is still a
 -- placeholder. Sync copies a row from here into `translations` the first
--- time it sees that key. Add rows here to seed AI text for future TODO keys.
+-- time it sees that key. It is filled from languages/<id>/ai_seed.json on
+-- every sync (existing rows are never overwritten), and you can add rows by hand.
 CREATE TABLE IF NOT EXISTS ai_seed (
   str_key  VARCHAR(100) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   text     TEXT NOT NULL,
@@ -96,33 +103,3 @@ CREATE TABLE IF NOT EXISTS rate_limits (
   hits          INT UNSIGNED NOT NULL,
   PRIMARY KEY (ip)
 ) ENGINE=InnoDB;
-
-INSERT IGNORE INTO ai_seed (str_key, text) VALUES
-('locationClearAll',  'Glan gach rud'),
-('locationDone',      'Déanta'),
-('locationRemove',    'Bain'),
-('linkUnavailable',   'níl sé ar fáil'),
-('skipToResults',     'Léim chuig na torthaí'),
-('skipToContent',     'Léim chuig an ábhar'),
-('heroTitle',         'Aimsigh eagraíocht tarrthála ainmhithe in aice leat'),
-('heroTrust',         'Ní dhéantar grinnfhiosrú ar na liostaí ná ní fhormhuinítear iad.'),
-('searchClear',       'Glan an cuardach'),
-('categoriesLabel',   'Cineál ainmhí'),
-('resultsCount',      '{n} eagraíocht'),
-('resultsCountOne',   '1 eagraíocht'),
-('clearFilters',      'Glan na scagairí'),
-('noResultsTitle',    'Níl aon tarrthálacha ag teacht le do chuardach'),
-('noResultsHint',     'Bain triail as focal nó contae eile, nó glan na scagairí chun gach eagraíocht a fheiceáil.'),
-('charityBadgeLabel', 'Carthanas cláraithe'),
-('inactiveLabel',     'B''fhéidir nach bhfuil sé gníomhach'),
-('closeLabel',        'Dún'),
-('footerTagline',     'Eolaire saor in aisce d''eagraíochtaí tarrthála ainmhithe sna 32 contae, á reáchtáil ag oibrithe deonacha.'),
-('footerValues',      'Gan fógraí · Gan urraíocht · Ní dhíoltar sonraí'),
-('footerExplore',     'Taiscéal'),
-('footerContact',     'Teagmháil'),
-('mapTitle',          'Léarscáil tarrthála'),
-('mapBrowseList',     'Brabhsáil mar liosta'),
-('mapLoading',        'Léarscáil á lódáil…'),
-('mapDismiss',        'Dún'),
-('aboutBmcButton',    'Ceannaigh caife dom'),
-('aboutRaised',       'bailithe');

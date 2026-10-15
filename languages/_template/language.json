@@ -1,0 +1,39 @@
+{
+  "project": {
+    "name": "My Project",
+    "url": "https://example.com"
+  },
+  "language": {
+    "code": "xx",
+    "name": "Examplish",
+    "native_name": "Examplish",
+    "logo": "xx"
+  },
+  "base_language": {
+    "code": "en",
+    "name": "English"
+  },
+  "source": {
+    "file_name": "translations.js",
+    "base_block": "en",
+    "target_block": "xx",
+    "todo_marker": "TODO (xx)"
+  },
+  "export": {
+    "file_name": "translations-xx.js"
+  },
+  "ai": {
+    "label": "AI"
+  },
+  "ui_locale": "en",
+  "storage_prefix": "tp_xx_",
+  "theme": {
+    "color": "#0b6e4f",
+    "light": {},
+    "dark": {}
+  },
+  "section_strip": [
+    "\\s*\\(.*\\)\\s*$"
+  ],
+  "ui": {}
+}

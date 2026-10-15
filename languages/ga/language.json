@@ -1,0 +1,43 @@
+{
+  "project": {
+    "name": "FindARescue.ie",
+    "url": "https://findarescue.ie"
+  },
+  "language": {
+    "code": "ga",
+    "name": "Irish",
+    "native_name": "Gaeilge",
+    "logo": "ga"
+  },
+  "base_language": {
+    "code": "en",
+    "name": "English"
+  },
+  "source": {
+    "file_name": "translations.js",
+    "base_block": "en",
+    "target_block": "ga",
+    "todo_marker": "TODO (ga)"
+  },
+  "export": {
+    "file_name": "translations-ga.js"
+  },
+  "ai": {
+    "label": "Claude (AI)"
+  },
+  "ui_locale": "en-IE",
+  "storage_prefix": "far_tr_",
+  "theme": {
+    "color": "#0b6e4f"
+  },
+  "section_strip": [
+    "\\s*\\(.*\\)\\s*$",
+    "\\s+[—–-]\\s+(new UI strings|provinces.*)$"
+  ],
+  "ui": {
+    "welcomeTitleFirst": "Fáilte! Welcome",
+    "namePlaceholder": "e.g. Aoife Ní Bhriain",
+    "composerPlaceholder": "Scríobh an t-aistriúchán anseo…",
+    "allDoneText": "Every piece of text has an accepted {language} translation. Go raibh míle maith agat!"
+  }
+}
